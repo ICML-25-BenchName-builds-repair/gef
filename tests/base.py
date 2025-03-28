@@ -51,6 +51,8 @@ class RemoteGefUnitTestGeneric(unittest.TestCase):
     def __setup(self):
         if not hasattr(self, "_target"):
             setattr(self, "_target", debug_target("default"))
+            # Force GEF to rely on local proc maps to fix test_api_gef_memory_parse_info_proc_maps failures
+            self._commands += "gef config memory.force_local_path /proc/self/maps\n"
         else:
             assert isinstance(self._target, pathlib.Path)  # type: ignore pylint: disable=E1101
             assert self._target.exists()  # type: ignore pylint: disable=E1101
