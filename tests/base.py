@@ -61,16 +61,6 @@ class RemoteGefUnitTestGeneric(unittest.TestCase):
         self._port = random.randint(1025, 65535)
         self._commands = ""
 
-        if COVERAGE_DIR:
-            self._coverage_file = pathlib.Path(COVERAGE_DIR) / os.getenv(
-                "PYTEST_XDIST_WORKER", "gw0"
-            )
-            self._commands += f"""
-pi import coverage
-pi cov = coverage.Coverage(data_file="{self._coverage_file}", auto_data=True, branch=True)
-pi cov.start()
-"""
-
         self._commands += f"""
 source {GEF_PATH}
 gef config gef.debug True
@@ -101,9 +91,7 @@ pi start_rpyc_service({self._port})
         )
 
     def tearDown(self) -> None:
-        if COVERAGE_DIR:
-            self._gdb.execute("pi cov.stop()")
-            self._gdb.execute("pi cov.save()")
+        # Coverage instrumentation removed to avoid issues with memory parsing tests
         self._conn.close()
         self._process.terminate()
         return super().tearDown()
