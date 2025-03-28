@@ -50,7 +50,7 @@ class RemoteGefUnitTestGeneric(unittest.TestCase):
 
     def __setup(self):
         if not hasattr(self, "_target"):
-            setattr(self, "_target", debug_target("default"))
+            setattr(self, "_target", debug_target("mmap-known-address.out"))
         else:
             assert isinstance(self._target, pathlib.Path)  # type: ignore pylint: disable=E1101
             assert self._target.exists()  # type: ignore pylint: disable=E1101
